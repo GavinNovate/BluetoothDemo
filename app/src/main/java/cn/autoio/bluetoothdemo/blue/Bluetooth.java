@@ -3,20 +3,16 @@ package cn.autoio.bluetoothdemo.blue;
 import android.Manifest;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
-import android.bluetooth.BluetoothSocket;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresPermission;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Set;
-import java.util.UUID;
 
 import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
-import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subjects.PublishSubject;
 import io.reactivex.subjects.Subject;
 
@@ -42,7 +38,7 @@ public class Bluetooth {
     private BluetoothAdapter bluetoothAdapter;
 
     // 蓝牙状态监听器
-    private Subject<State> blueStateSubject;
+    private Subject<Integer> blueStateSubject;
     // 蓝牙设备发现监听器
     private Subject<BluetoothDevice> blueDeviceSubject;
 
@@ -73,8 +69,8 @@ public class Bluetooth {
      *
      * @return 蓝牙状态
      */
-    public State getState() {
-        return convertState(bluetoothAdapter.getState());
+    public int getState() {
+        return bluetoothAdapter.getState();
     }
 
     /**
@@ -82,7 +78,7 @@ public class Bluetooth {
      *
      * @return 蓝牙状态观察对象
      */
-    public Observable<State> observeState() {
+    public Observable<Integer> observeState() {
         return blueStateSubject;
     }
 
@@ -172,22 +168,22 @@ public class Bluetooth {
                 });
     }
 
-    public void connect(final BluetoothDevice serviceDevice) {
-        cancelDiscovery();
-        serviceDevice.createBond();
-        Observable.just(0)
-                .subscribeOn(Schedulers.newThread())
-                .subscribe(new Consumer<Integer>() {
-                    @Override
-                    public void accept(Integer integer) throws Exception {
-                        try {
-                            BluetoothSocket socket = serviceDevice.createRfcommSocketToServiceRecord(UUID.fromString("05c66aab-54c4-4a28-a5fc-3fdb98865824"));
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                });
-    }
+//    public void connect(final BluetoothDevice serviceDevice) {
+//        cancelDiscovery();
+//        serviceDevice.createBond();
+//        Observable.just(0)
+//                .subscribeOn(Schedulers.newThread())
+//                .subscribe(new Consumer<Integer>() {
+//                    @Override
+//                    public void accept(Integer integer) throws Exception {
+//                        try {
+//                            BluetoothSocket socket = serviceDevice.createRfcommSocketToServiceRecord(UUID.fromString("05c66aab-54c4-4a28-a5fc-3fdb98865824"));
+//                        } catch (IOException e) {
+//                            e.printStackTrace();
+//                        }
+//                    }
+//                });
+//    }
 
 //    public void listen() {
 //        Observable.just(0)
@@ -218,10 +214,9 @@ public class Bluetooth {
      */
     void onStateChanged(int state) {
         if (blueStateSubject.hasObservers()) {
-            blueStateSubject.onNext(convertState(state));
+            blueStateSubject.onNext(state);
         }
     }
-
 
     /**
      * 蓝牙扫描开始
@@ -263,42 +258,6 @@ public class Bluetooth {
                 subject.onComplete();
             }
         }
-    }
-
-    /**
-     * 转换数字类型的状态为枚举类型的状态
-     *
-     * @param state 数字类型的状态
-     * @return 枚举类型的状态
-     */
-    private State convertState(int state) {
-        switch (state) {
-            // 打开中
-            case BluetoothAdapter.STATE_TURNING_ON:
-                return State.TURNING_ON;
-            // 打开
-            case BluetoothAdapter.STATE_ON:
-                return State.ON;
-            // 关闭中
-            case BluetoothAdapter.STATE_TURNING_OFF:
-                return State.TURNING_OFF;
-            // 关闭
-            case BluetoothAdapter.STATE_OFF:
-                return State.OFF;
-            default:
-                return State.NONE;
-        }
-    }
-
-    /**
-     * 蓝牙状态
-     */
-    public enum State {
-        NONE,
-        TURNING_ON,
-        ON,
-        TURNING_OFF,
-        OFF
     }
 
     /**

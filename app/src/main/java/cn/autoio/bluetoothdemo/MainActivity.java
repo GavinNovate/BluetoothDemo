@@ -1,5 +1,6 @@
 package cn.autoio.bluetoothdemo;
 
+import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -72,23 +73,23 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        toolbar.getMenu().getItem(0).setEnabled(bluetooth.getState().equals(Bluetooth.State.ON));
-        switchView.setChecked(bluetooth.getState().equals(Bluetooth.State.ON));
-        contentLayout.setVisibility(bluetooth.getState().equals(Bluetooth.State.ON) ? View.VISIBLE : View.GONE);
-        if (bluetooth.getState().equals(Bluetooth.State.ON)) {
+        toolbar.getMenu().getItem(0).setEnabled(bluetooth.getState() == BluetoothAdapter.STATE_ON);
+        switchView.setChecked(bluetooth.getState() == BluetoothAdapter.STATE_ON);
+        contentLayout.setVisibility(bluetooth.getState() == BluetoothAdapter.STATE_ON ? View.VISIBLE : View.GONE);
+        if (bluetooth.getState() == BluetoothAdapter.STATE_ON) {
             blueOpened();
         }
 
         bluetooth
                 .observeState()
                 .subscribeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<Bluetooth.State>() {
+                .subscribe(new Consumer<Integer>() {
                     @Override
-                    public void accept(Bluetooth.State state) throws Exception {
-                        toolbar.getMenu().getItem(0).setEnabled(state.equals(Bluetooth.State.ON));
-                        switchView.setChecked(state.equals(Bluetooth.State.ON));
-                        contentLayout.setVisibility(state.equals(Bluetooth.State.ON) ? View.VISIBLE : View.GONE);
-                        if (bluetooth.getState().equals(Bluetooth.State.ON)) {
+                    public void accept(Integer state) throws Exception {
+                        toolbar.getMenu().getItem(0).setEnabled(state == BluetoothAdapter.STATE_ON);
+                        switchView.setChecked(state == BluetoothAdapter.STATE_ON);
+                        contentLayout.setVisibility(state == BluetoothAdapter.STATE_ON ? View.VISIBLE : View.GONE);
+                        if (state == BluetoothAdapter.STATE_ON) {
                             blueOpened();
                         }
                     }
