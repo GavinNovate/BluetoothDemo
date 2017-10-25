@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        is-multidex="true"
+        jar="/home/gavin/SoftWare/Android/Projects/BluetoothDemo/app/build/intermediates/incremental-classes/debug/instant-run-bootstrap.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="26.0.1"
+        sha1="d384c2e67e764d4031b2c86744b1b1e0f6f7d0ea">
+        <dex dex="/home/gavin/SoftWare/Android/Projects/BluetoothDemo/app/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run-bootstrap_45bc8ac95b4f523c7c0628e77757779c3eafe31b/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/gavin/SoftWare/Android/Projects/BluetoothDemo/app/build/intermediates/incremental-runtime-classes/debug/instant-run.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="26.0.1"
+        sha1="3be78ebc2706b2e1fe2f12d5726887a92d6c183b">
+        <dex dex="/home/gavin/SoftWare/Android/Projects/BluetoothDemo/app/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run_640fce2c9c3d087abc2e00607b678294ef539457/classes.dex" />
+    </item>
+
+</items>
